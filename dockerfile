@@ -1,8 +1,20 @@
-# Use the official Nginx image as the base image
-FROM nginx:latest
+# Use an official Python runtime as the base image
+FROM python:3.9
 
-# Copy the static HTML file into the container
-COPY index.html /usr/share/nginx/html
+# Set the working directory in the container
+WORKDIR /usr/src/app
 
-# Expose port 80 to the outside world
-EXPOSE 80
+# Copy the dependencies file to the working directory
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code to the working directory
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 8000
+
+# Command to run the application
+CMD ["python", "app.py"]
