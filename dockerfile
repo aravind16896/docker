@@ -1,20 +1,22 @@
-# Use an official Python runtime as the base image
-FROM python:3.9
+# Use the official CentOS 8 base image
+FROM centos:8
+
+# Install necessary dependencies
+RUN yum -y update && \
+    yum -y install python3 python3-pip && \
+    yum clean all
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy the dependencies file to the working directory
-COPY app.py .
-
-# Install dependencies
-RUN yum install --no-cache-dir -r requirements.txt
-
-# Copy the rest of the application code to the working directory
+# Copy the application code into the container
 COPY . .
 
-# Expose the port the app runs on
+# Install Python dependencies
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Expose any necessary ports
 EXPOSE 8000
 
 # Command to run the application
-CMD ["python", "app.py"]
+CMD ["python3", "app.py"]
